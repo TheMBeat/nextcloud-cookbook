@@ -10,6 +10,22 @@ module.exports = merge(common, {
         minimizer: [
             new TerserPlugIn({
                 terserOptions:{
+                    //sideEffects: false,
+                    // All files have side effects, and none can be tree-shaken
+                    // {
+                    //  "sideEffects": true
+                    // }
+                    // // No files have side effects, all can be tree-shaken
+                    // {
+                    //  "sideEffects": false
+                    // }
+                    // // Only these files have side effects, all other files can be tree-shaken, but these must be kept
+                    // {
+                    //  "sideEffects": [
+                    //   "./src/file1.js",
+                    //   "./src/file2.js"
+                    //  ]
+                    // }
                     output:{
                         comments: false
                     }

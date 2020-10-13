@@ -1,6 +1,7 @@
 const parseDomain = require("parse-domain"); // In einer späteren Version hat sich etwas geändert?
 const cheerio = require("cheerio");
 const fetch = require('node-fetch')
+const axios = require('axios').default
 
 
 const domains = {
@@ -52,12 +53,16 @@ const fallback = require("./modules/fallback")
 
 const recipeScraper = url => {
   return new Promise((resolve, reject) => {
-    getJson(url, parseRecipe, resolve, reject)
+
+      getJson(url, parseRecipe, resolve, reject)
+
   })
 }
 
 function checkStatus(response) {
-  if (response.ok) { // res.status >= 200 && res.status < 300
+  if (response.ok) {
+    // res.status >= 200 && res.status < 300
+    console.log(response.ok)
     return response;
   } else {
     console.log(myUrl + "Reponse Status: " + response.statusCode)
@@ -121,11 +126,16 @@ function getJson(myUrl, callback, resolve, reject) {
       }
       return callback(myUrl, html, resolve, reject)
     })
-    .catch(err => reject(new Error(err)))
+    .catch(err => {
+      console.log('NO ld+json found.')
+      reject(new Error(err))
+    })
 }
 
 function parseRecipe(myUrl, html, resolve, reject) {
   let parse = parseDomain(myUrl)
+
+  console.log('SCRAPER')
 
   if (parse) {
     let domain = parse.domain;

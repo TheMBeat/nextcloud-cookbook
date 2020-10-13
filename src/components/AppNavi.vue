@@ -215,30 +215,35 @@ export default {
         downloadRecipe: function(e) {
             let deferred = $.Deferred()
             this.downloading = true
-            
-            //TODO: Hier die neuen Scraper aufrufen.
-            //      Bei Fehler die alte Methode aufrufen
-            recipeScraper(element).then(recipe => {
+
+            recipeScraper(e.target[1].value)
+            .then(recipe => {
                 console.log(JSON.stringify(recipe, undefined, 2))
-            }).catch(error => {
-                console.log(error)
-                $.ajax({
-                    url: this.$window.baseUrl + '/import',
-                    method: 'POST',
-                    data: 'url=' + e.target[1].value
-                }).done((recipe) => {
-                    this.downloading = false
-                    this.$window.goTo('/recipe/' + recipe.id)
-                    e.target[1].value = ''
-                    deferred.resolve()
-                }).fail((jqXHR, textStatus, errorThrown) => {
-                    this.downloading = false
-                    deferred.reject(new Error(jqXHR.responseText))
-                    //TODO: Neues Fehlerfenster
-                    alert(t('cookbook', jqXHR.responseJSON))
-                })
                 return deferred.promise()
             })
+            .catch(error => {
+                // this.downloading = false
+                // deferred.reject(new Error(error))
+            })
+            
+            // $.ajax({
+            //     url: this.$window.baseUrl + '/import',
+            //     method: 'POST',
+            //     data: 'url=' + e.target[1].value
+            // }).done((recipe) => {
+            //     this.downloading = false
+            //     this.$window.goTo('/recipe/' + recipe.id)
+            //     e.target[1].value = ''
+            //     deferred.resolve()
+            // }).fail((jqXHR, textStatus, errorThrown) => {
+            //     this.downloading = false
+            //     deferred.reject(new Error(jqXHR.responseText))
+            //     //TODO: Neues Fehlerfenster
+            //     alert(t('cookbook', jqXHR.responseJSON))
+            // })
+            
+            
+            return deferred.promise()
         },
 
         /**

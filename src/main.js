@@ -11,8 +11,6 @@
 import Vue from 'vue'
 import router from './router'
 import store from './store'
-//import recipeScraper from './scraper/recipeScraper'
-//const recipeScraper = require('./scraper/recipeScraper')
 
 //import AppNavi from './components/AppNavi'
 import AppMain from './components/AppMain'
@@ -175,8 +173,6 @@ import AppMain from './components/AppMain'
 
     // Pass translation engine to Vue
     Vue.prototype.t = window.t
-
-    //Vue.use(recipeScraper)
 
     // Start the app once document is done loading
     $(document).ready(function () {
