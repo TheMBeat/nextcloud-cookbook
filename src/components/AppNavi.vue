@@ -91,6 +91,8 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 import AppNavigationSpacer from '@nextcloud/vue/dist/Components/AppNavigationSpacer'
+//import recipeScraper from '../scrapers/recipeScraper.js'
+const recipeScraper = require('../scraper/recipeScraper')
 
 export default {
     name: 'AppNavi',
@@ -213,21 +215,30 @@ export default {
         downloadRecipe: function(e) {
             let deferred = $.Deferred()
             this.downloading = true
-            $.ajax({
-                url: this.$window.baseUrl + '/import',
-                method: 'POST',
-                data: 'url=' + e.target[1].value
-            }).done((recipe) => {
-                this.downloading = false
-                this.$window.goTo('/recipe/' + recipe.id)
-                e.target[1].value = ''
-                deferred.resolve()
-            }).fail((jqXHR, textStatus, errorThrown) => {
-                this.downloading = false
-                deferred.reject(new Error(jqXHR.responseText))
-                alert(t('cookbook', jqXHR.responseJSON))
+            
+            //TODO: Hier die neuen Scraper aufrufen.
+            //      Bei Fehler die alte Methode aufrufen
+            recipeScraper(element).then(recipe => {
+                console.log(JSON.stringify(recipe, undefined, 2))
+            }).catch(error => {
+                console.log(error)
+                $.ajax({
+                    url: this.$window.baseUrl + '/import',
+                    method: 'POST',
+                    data: 'url=' + e.target[1].value
+                }).done((recipe) => {
+                    this.downloading = false
+                    this.$window.goTo('/recipe/' + recipe.id)
+                    e.target[1].value = ''
+                    deferred.resolve()
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    this.downloading = false
+                    deferred.reject(new Error(jqXHR.responseText))
+                    //TODO: Neues Fehlerfenster
+                    alert(t('cookbook', jqXHR.responseJSON))
+                })
+                return deferred.promise()
             })
-            return deferred.promise()
         },
 
         /**

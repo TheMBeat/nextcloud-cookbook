@@ -18,6 +18,11 @@ module.exports = {
         filename: '[name].js',
         chunkFilename: '[name].js?v=[contenthash]',
     },
+    // HACK:
+    // target: 'node',
+    // externals: {
+    //     "request": "request"
+    // },
     module: {
         rules: [
             {
