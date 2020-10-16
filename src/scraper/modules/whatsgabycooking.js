@@ -31,7 +31,7 @@ const whatsGabyCooking = (url, html) => {
               .find(".wprm-recipe-instruction-text")
               .text()
             if (groupName) {
-              Recipe.recipeInstructions.push("# "+groupName)
+              Recipe.recipeInstructions.push("## "+groupName)
             }
             Recipe.recipeInstructions.push(instruction)
           })

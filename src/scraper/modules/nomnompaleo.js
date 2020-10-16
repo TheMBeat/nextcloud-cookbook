@@ -31,7 +31,7 @@ const nomNomPaleo = (url, html) => {
             .children(".wprm-recipe-group-name")
             .text()
           if (groupName.length) {
-            Recipe.recipeInstructions.push("# "+groupName)
+            Recipe.recipeInstructions.push("## "+groupName)
           }
           $(el)
             .find(".wprm-recipe-instruction-text")

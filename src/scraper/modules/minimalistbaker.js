@@ -28,7 +28,7 @@ const minimalistBaker = (url, html) => {
         let group = $(el)
           .children(".wprm-recipe-group-name")
           .text()
-        if (group.length) Recipe.recipeInstructions.push("# " + group)
+        if (group.length) Recipe.recipeInstructions.push("## " + group)
         $(el)
           .find(".wprm-recipe-instruction-text")
           .each((i, elChild) => {

@@ -59,9 +59,16 @@ const urls = [
 //     });
 // });
 
-recipeScraper(urls[20]).then(recipe => {
+
+recipeScraper('https://www.chefkoch.de/rezepte/18711004787789/Risotto-mit-gruenem-Spargel-und-Parmesan.html').then(recipe => {
     console.log(JSON.stringify(recipe, undefined, 2))
 }).catch(error => {
     console.log(error)
 });
+
+// recipeScraper(urls[20]).then(recipe => {
+//     console.log(JSON.stringify(recipe, undefined, 2))
+// }).catch(error => {
+//     console.log(error)
+// });
 

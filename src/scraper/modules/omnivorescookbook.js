@@ -20,7 +20,7 @@ const omnivorescookbook = (url, html) => {
           .find(".wprm-recipe-group-name")
           .text()
         if (group) {
-          Recipe.recipeIngredient.push("# " + group)
+          Recipe.recipeIngredient.push("## " + group)
         }
         $(el)
           .find(".wprm-recipe-ingredient")

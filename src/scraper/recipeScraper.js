@@ -1,7 +1,9 @@
 const parseDomain = require("parse-domain"); // In einer späteren Version hat sich etwas geändert?
 const cheerio = require("cheerio");
 const fetch = require('node-fetch')
-const axios = require('axios').default
+// const axios = require('axios').default
+
+const urlHelper = 'http://alloworigin.com/get?url='
 
 
 const domains = {
@@ -62,24 +64,30 @@ const recipeScraper = url => {
 function checkStatus(response) {
   if (response.ok) {
     // res.status >= 200 && res.status < 300
-    console.log(response.ok)
+    console.log('Server Response: ' + response.status)
     return response;
   } else {
-    console.log(myUrl + "Reponse Status: " + response.statusCode)
+    console.log(myUrl + "Server Reponse: " + response.status)
     reject(new Error("No recipe found on page"))
   }
 }
 
 function getJson(myUrl, callback, resolve, reject) {
 
-  fetch(myUrl)
+  //Hint: axios need res.data instead of res.text() for fetch
+  // https://cors-anywhere.herokuapp.com
+  //axios(`https://api.allorigins.win/get?url=${encodeURIComponent(myUrl)}`)
+  // axios(urlHelper + myUrl)
+  //fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(myUrl)}`)
+  //https://api.allorigins.win/raw?url=https://example.org/
+  fetch(myUrl) 
     .then(
       checkStatus)
     .then(res => res.text())
     .then(html => {
 
       const $ = cheerio.load(html)
-      var json_ld_elements = $("script[type='application/ld+json']").toArray()
+      var json_ld_elements = $("script[type='application/ld+json']")
 
       for (var i in json_ld_elements) {
         for (var j in json_ld_elements[i].children) {
@@ -104,6 +112,8 @@ function getJson(myUrl, callback, resolve, reject) {
                   }
 
                   if ('@type' in graph && graph["@type"] === "Recipe") {
+                    //TODO: Check all Props, maybe some are missing eg. url
+
                     //console.log(JSON.stringify(json_ld_obj, undefined, 2))
                     //console.log(myUrl + " JSON: True")
                     return resolve(graph)
@@ -118,6 +128,8 @@ function getJson(myUrl, callback, resolve, reject) {
           }
 
           if ('@type' in json_ld_obj && json_ld_obj["@type"] === "Recipe") {
+
+            //TODO: Check for missing Prop like url
             //console.log(JSON.stringify(json_ld_obj, undefined, 2))
             //console.log(myUrl + " JSON: True")
             return resolve(json_ld_obj)
